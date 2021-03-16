@@ -1,7 +1,7 @@
 const sass = require("node-sass");
 
-const run = async() => {
-  let results = sass.render({
+const synchronous = () => {
+  sass.render({
     data: `@import "entry";`,
     importer: function(u, p, d) {
       console.log("url", u, p);
@@ -14,4 +14,18 @@ const run = async() => {
   );
 }
 
-run();
+const asynchronous = async() => {
+  let results = await sass.renderSync({
+    data: `@import "entry";`,
+    importer: function(u, p, d) {
+      console.log("url", u, p);
+      return { file: u }
+    }
+  })
+
+  console.log(results.css.toString());
+}
+
+
+asynchronous();
+synchronous();
